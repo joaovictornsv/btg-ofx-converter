@@ -1,0 +1,81 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build ${{ matrix.artifact_name }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            artifact_name: btg-ofx-converter-linux-x86_64
+            binary: dist/btg-ofx-converter
+          - os: windows-latest
+            artifact_name: btg-ofx-converter-windows-x86_64
+            binary: dist/btg-ofx-converter.exe
+          - os: macos-latest
+            artifact_name: btg-ofx-converter-macos-arm64
+            binary: dist/btg-ofx-converter
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt pyinstaller
+
+      - name: Build binary
+        run: pyinstaller --clean btg-ofx-converter.spec
+
+      - name: Smoke test
+        shell: bash
+        run: |
+          "${{ matrix.binary }}" checking examples/sample_extrato.xls
+          test -f examples/sample_extrato.ofx
+          "${{ matrix.binary }}" card examples/sample_fatura.xlsx
+          test -f examples/sample_fatura.ofx
+
+      - name: Package artifact
+        shell: bash
+        run: |
+          mkdir -p release
+          cp "${{ matrix.binary }}" "release/${{ matrix.artifact_name }}"
+          cp docs/guia-btg-ofx.html "release/guia-btg-ofx.html"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: |
+            release/${{ matrix.artifact_name }}
+            release/guia-btg-ofx.html
+
+  release:
+    name: Publish GitHub Release
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/*
+          generate_release_notes: true
