@@ -6,7 +6,7 @@ import shutil
 import sys
 from pathlib import Path
 
-GUIDE_FILENAME = "guia-btg-ofx.md"
+GUIDE_FILENAME = "guia-btg-ofx.html"
 
 
 def guide_source_path() -> Path:
@@ -24,3 +24,5 @@ def write_guide_copy(output_dir: Path) -> None:
         return
     output_dir.mkdir(parents=True, exist_ok=True)
     shutil.copy2(source, destination)
+    print(f"Guia copiado: {destination}")
+    print("Abra guia-btg-ofx.html no navegador (Chrome, Firefox, Edge, Safari).")

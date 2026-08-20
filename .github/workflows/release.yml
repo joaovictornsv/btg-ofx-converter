@@ -54,7 +54,7 @@ jobs:
         run: |
           mkdir -p release
           cp "${{ matrix.binary }}" "release/${{ matrix.artifact_name }}"
-          cp docs/guia-btg-ofx.md "release/guia-btg-ofx.md"
+          cp docs/guia-btg-ofx.html "release/guia-btg-ofx.html"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -62,7 +62,7 @@ jobs:
           name: ${{ matrix.artifact_name }}
           path: |
             release/${{ matrix.artifact_name }}
-            release/guia-btg-ofx.md
+            release/guia-btg-ofx.html
 
   release:
     name: Publish GitHub Release

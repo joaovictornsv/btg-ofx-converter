@@ -1,176 +1,117 @@
-# btg-ofx-converter
+# BTG para OFX
 
-Convert **BTG Pactual** bank exports to **OFX** — for importing into personal finance apps (Quicken, GNUCash, etc.).
+Programa gratuito que converte exportações do **BTG Pactual** para o formato **OFX** — para importar no seu app de finanças (Quicken, GNUCash, etc.).
 
-Runs entirely on your machine. No account data is uploaded anywhere.
+> Ferramenta não oficial. Não tem ligação com o BTG Pactual.
 
-## Summary
+---
 
-- [Privacy](#privacy)
-- [What it does](#what-it-does)
-- [Limitations](#limitations)
-- [Report issues / feedback](#report-issues--feedback)
-- [Recommended folder (especially for non-developers)](#recommended-folder-especially-for-non-developers)
-- [Guia em português](#guia-em-português)
-- [Quick start (download — no Python)](#quick-start-download--no-python)
-- [Exporting from BTG](#exporting-from-btg)
-- [Quick start (from source)](#quick-start-from-source)
-- [Development](#development)
-- [License](#license)
+## Privacidade
 
-## Privacy
+- Roda **100% no seu computador**
+- **Não** envia extratos, faturas ou dados bancários para nenhum servidor
+- **Não** precisa de internet para converter
+- Não compartilhe seus arquivos do banco publicamente
 
-- **Everything runs locally** — your extratos and faturas never leave your computer.
-- **Do not commit** real `.xls`, `.xlsx`, or generated `.ofx` files to git or share them publicly.
-- This repository contains **no real account data** — only synthetic examples under `examples/`.
+---
 
-## What it does
+## O que faz
 
-Two commands, two BTG export types:
+Converte dois tipos de arquivo do BTG:
 
-| Command | Input | Output |
-| ------- | ----- | ------ |
-| `checking` | Checking-account `.xls` extrato | `{name}.ofx` |
-| `card` | Credit card `.xlsx` fatura | `{name}.ofx` |
+| O que é | Arquivo do BTG | Comando |
+| ------- | -------------- | ------- |
+| Extrato da **conta corrente** | `.xls` | `checking` |
+| **Fatura** do cartão de crédito | `.xlsx` | `card` |
 
-Tested only with **BTG Pactual** export formats. Not affiliated with BTG.
+Gera um arquivo **`.ofx`** na mesma pasta do arquivo original (mesmo nome, só muda a extensão).
 
-## Limitations
+---
 
-- **Checking:** legacy `.xls` extrato de conta corrente — not `.xlsx`.
-- **Card:** `.xlsx` fatura de cartão — not the checking extrato format.
-- **Card password:** BTG fatura downloads are often **password-protected**. This tool cannot read encrypted files. Open the fatura in Excel or LibreOffice with your password, then **Save a copy without a password** before running `card`.
-- BTG may change export layouts; if conversion fails after a BTG update, [open an issue](#report-issues--feedback).
-- Credit card OFX uses `ACCTTYPE=CREDITCARD` inside a standard bank OFX envelope. Some apps may expect a different credit-card OFX layout.
+## Como usar (depois de baixar)
 
-## Report issues / feedback
+### Conta corrente (extrato `.xls`)
 
-If something does not work or BTG changed their export format:
+1. Baixe o extrato no app ou site do BTG (arquivo **`.xls`**, não `.xlsx`)
+2. Coloque o programa e o extrato **na mesma pasta**
+3. Abra o terminal nessa pasta e rode:
 
-- Open a [GitHub Issue](https://github.com/joaovictornsv/btg-ofx-converter/issues)
-- Or email [hi@joaovictornsv.dev](mailto:hi@joaovictornsv.dev)
-
-## Recommended folder (especially for non-developers)
-
-Create a **dedicated folder** for BTG exports and the converter — not mixed with Downloads.
-
-**Put in that folder:**
-
-- The downloaded **program** (`btg-ofx-converter.exe` on Windows, or `btg-ofx-converter-macos-arm64` / `btg-ofx-converter-linux-x86_64`)
-- Your BTG **extrato** (`.xls`) and/or **fatura** (`.xlsx`) files
-- The generated **`.ofx`** files (created next to each input file)
-
-**Example layout:**
+**Windows**
 
 ```text
-btg-ofx/                              ← your dedicated folder
-├── btg-ofx-converter-macos-arm64     ← program (or .exe on Windows)
-├── Extrato_2026-01.xls               ← BTG checking export
-├── extrato.ofx                       ← generated
-├── 2026-08-15_Fatura_BTG.xlsx        ← BTG card fatura
-├── fatura.ofx                        ← generated (same stem as input)
-└── guia-btg-ofx.md                   ← usage guide (copied here on first run)
+btg-ofx-converter.exe checking Extrato_2026-01.xls
 ```
 
-Open the terminal **inside** this folder before running commands.
+**Mac / Linux**
 
-## Guia em português
+```bash
+./btg-ofx-converter-linux-x86_64 checking Extrato_2026-01.xls
+```
 
-Step-by-step instructions in Portuguese: **[docs/guia-btg-ofx.md](docs/guia-btg-ofx.md)** — readable directly on GitHub.
+4. Importe o arquivo `.ofx` gerado no seu app de finanças
 
-## Quick start (download — no Python)
+---
 
-1. Create your folder and download the program from **[Releases](https://github.com/joaovictornsv/btg-ofx-converter/releases)**:
-   - **Windows:** `btg-ofx-converter-windows-x86_64` → rename to `btg-ofx-converter.exe` (optional)
-   - **macOS (Apple Silicon):** `btg-ofx-converter-macos-arm64`
+### Cartão de crédito (fatura `.xlsx`)
+
+1. Baixe a fatura no app ou site do BTG
+2. **Abra a fatura no Excel ou LibreOffice** com a senha (o BTG envia por email ou mostra no app)
+3. **Salve uma cópia sem senha** — *Arquivo → Salvar como*, deixando os campos de senha vazios
+4. Coloque o programa e a **cópia sem senha** na mesma pasta
+5. Rode no terminal:
+
+**Windows**
+
+```text
+btg-ofx-converter.exe card 2026-08-15_Fatura_BTG.xlsx
+```
+
+**Mac / Linux**
+
+```bash
+./btg-ofx-converter-linux-x86_64 card 2026-08-15_Fatura_BTG.xlsx
+```
+
+6. Importe o arquivo `.ofx` gerado
+
+---
+
+## Como baixar o programa
+
+1. Abra a página de **[Releases](https://github.com/joaovictornsv/btg-ofx-converter/releases)**
+2. Baixe o arquivo do **seu sistema** — **não** baixe “Source code”:
+   - **Windows:** `btg-ofx-converter-windows-x86_64`
+   - **Mac (Apple Silicon):** `btg-ofx-converter-macos-arm64`
    - **Linux:** `btg-ofx-converter-linux-x86_64`
-2. Read the [Portuguese guide](docs/guia-btg-ofx.md) (also copied to your folder on first run).
-3. Export your file from BTG (see [Exporting from BTG](#exporting-from-btg)).
-4. Run the matching command:
+3. Coloque o arquivo numa **pasta fixa** (ex.: `Documentos/btg-ofx/`) junto com seus extratos e faturas
+4. Na **primeira execução**, o programa copia **`guia-btg-ofx.html`** para essa pasta — **abra no navegador** (Chrome, Firefox, Edge, Safari): clique duas vezes no arquivo ou arraste para uma janela do navegador
 
-**Checking account (`.xls`)**
+![Baixar o programa na página Releases](docs/images/01-download-release.png)
 
-```bash
-./btg-ofx-converter-macos-arm64 checking Extrato_2026-01.xls
-```
+**Mac:** na primeira execução pode aparecer aviso de segurança. Use **Ajustes do Sistema → Privacidade e Segurança → Abrir assim mesmo**.
 
-**Credit card fatura (`.xlsx`)**
+**Linux / Mac:** pode ser preciso dar permissão uma vez:
 
 ```bash
-./btg-ofx-converter-macos-arm64 card 2026-08-15_Fatura_BTG.xlsx
+chmod +x btg-ofx-converter-linux-x86_64
 ```
 
-5. Import the generated `.ofx` into your finance app.
+---
 
-**macOS:** first run may show a Gatekeeper warning (unsigned binary). Use **System Settings → Privacy & Security → Open Anyway**, or run once: `xattr -cr ./btg-ofx-converter-macos-arm64`.
+## Problemas comuns
 
-**No internet required** — conversion is fully offline.
+| Problema | O que fazer |
+| -------- | ----------- |
+| Erro `File is not a zip file` na fatura | A fatura ainda está **com senha**. Abra no Excel/LibreOffice, salve **cópia sem senha** e tente de novo. |
+| Comando `checking` não funciona | Confira se o extrato é **`.xls`** (conta corrente), não `.xlsx`. |
+| Comando `card` não funciona | Confira se é a **fatura do cartão** em **`.xlsx`**, não o extrato da conta. |
+| Arquivo não encontrado | Abra o terminal **dentro da pasta** onde estão o programa e o arquivo do BTG. |
+| Mac bloqueia o programa | **Privacidade e Segurança → Abrir assim mesmo**, ou rode `xattr -cr ./btg-ofx-converter-macos-arm64` uma vez. |
 
-## Exporting from BTG
+Algo não funcionou? Abra uma [issue no GitHub](https://github.com/joaovictornsv/btg-ofx-converter/issues) ou escreva para [hi@joaovictornsv.dev](mailto:hi@joaovictornsv.dev).
 
-### Checking account — extrato (`.xls`)
+---
 
-1. Open the BTG app or website and go to your **conta corrente**.
-2. Export or download the **extrato** for the desired period.
-3. Confirm the file extension is **`.xls`** (Excel 97–2003), not `.xlsx`.
-4. Run `checking` with the file path.
+## Para desenvolvedores
 
-### Credit card — fatura (`.xlsx`)
-
-1. Open the BTG app or website and go to **cartão de crédito**.
-2. Download the **fatura** for the desired cycle (often named like `YYYY-MM-DD_Fatura_BTG.xlsx`).
-3. Confirm the extension is **`.xlsx`**.
-4. **Remove the file password** (required for most BTG faturas):
-   - Open the downloaded file in **Excel** or **LibreOffice Calc**.
-   - Enter the password when prompted (BTG usually sends it by email or shows it in the app).
-   - **Save a copy** without password protection — e.g. *File → Save As* and leave the password fields empty.
-   - Use that **unprotected copy** for conversion (keep the original locked file as backup if you want).
-5. Run `card` with the **unprotected** file path.
-
-If conversion fails with `File is not a zip file`, the file is still password-protected or not a real `.xlsx` — repeat step 4.
-
-## Quick start (from source)
-
-### Requirements
-
-- Python 3.10+
-- `xlrd` (`.xls`) and `openpyxl` (`.xlsx`)
-
-### Installation
-
-```bash
-git clone https://github.com/joaovictornsv/btg-ofx-converter.git
-cd btg-ofx-converter
-
-python3 -m venv .venv
-source .venv/bin/activate   # Windows: .venv\Scripts\activate
-
-pip install -r requirements.txt
-```
-
-### Try with sample files (no real data)
-
-```bash
-python convert.py checking examples/sample_extrato.xls
-python convert.py card examples/sample_fatura.xlsx
-```
-
-### Run tests
-
-```bash
-python -m unittest discover -s tests -v
-```
-
-## Development
-
-Maintainers: tag `v*` to trigger GitHub Actions release builds.
-
-```bash
-./scripts/build-binary.sh
-```
-
-See [PLAN.md](PLAN.md) for architecture and release details.
-
-## License
-
-[MIT](LICENSE)
+Detalhes técnicos, testes, código-fonte e publicação de versões: **[TECH_README.md](TECH_README.md)**
