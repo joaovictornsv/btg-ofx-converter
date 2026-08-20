@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guia — BTG para OFX (btg-ofx-converter)</title>
+  <style>
+    :root {
+      --bg: #f4f6f9;
+      --card: #ffffff;
+      --text: #1a2332;
+      --muted: #5c6578;
+      --accent: #2563eb;
+      --border: #e2e8f0;
+      --warn: #b45309;
+      --warn-bg: #fef3c7;
+      --ok-bg: #ecfdf5;
+      --ok-border: #6ee7b7;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    main { max-width: 900px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+    h1, h2, h3 { line-height: 1.2; }
+    h1 { font-size: 1.9rem; margin-bottom: 0.25rem; }
+    .subtitle { color: var(--muted); margin-bottom: 2rem; }
+    section {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.25rem;
+      border: 1px solid var(--border);
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+    }
+    ol, ul { padding-left: 1.25rem; }
+    .privacy {
+      border-left: 4px solid #059669;
+      background: var(--ok-bg);
+      border-radius: 0 8px 8px 0;
+      padding: 0.75rem 1rem;
+    }
+    .warn {
+      border-left: 4px solid var(--warn);
+      background: var(--warn-bg);
+      border-radius: 0 8px 8px 0;
+      padding: 0.75rem 1rem;
+      color: var(--muted);
+    }
+    code {
+      background: #f1f5f9;
+      padding: 0.1rem 0.35rem;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      font-size: 0.9em;
+    }
+    pre {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 1rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 0.88rem;
+    }
+    h4 { margin: 1.25rem 0 0.5rem; font-size: 1rem; }
+    h4:first-child { margin-top: 0; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Guia de uso — BTG para OFX</h1>
+  <p class="subtitle">Converta extratos e faturas do BTG Pactual para OFX e importe no seu app de finanças.</p>
+
+  <section class="privacy">
+    <h2>Privacidade</h2>
+    <ul>
+      <li><strong>Processamento 100% local</strong> — seus dados bancários não são enviados para nenhum servidor.</li>
+      <li><strong>Não compartilhe</strong> extratos, faturas ou arquivos OFX gerados publicamente.</li>
+      <li>O programa <strong>não precisa de internet</strong> para converter.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>O que é OFX?</h2>
+    <p>OFX é um formato de extrato usado por apps como Quicken, GNUCash e outros. Este conversor transforma os arquivos exportados pelo BTG nesse formato.</p>
+    <p class="warn"><strong>Importante:</strong> testado apenas com exportações do <strong>BTG Pactual</strong>. Não é um produto oficial do banco.</p>
+  </section>
+
+  <section>
+    <h2>Dois tipos de arquivo, dois comandos</h2>
+    <table style="width:100%; border-collapse: collapse; font-size: 0.95rem;">
+      <tr style="border-bottom: 1px solid var(--border);">
+        <th style="text-align:left; padding: 0.5rem 0;">Tipo</th>
+        <th style="text-align:left; padding: 0.5rem 0;">Extensão</th>
+        <th style="text-align:left; padding: 0.5rem 0;">Comando</th>
+      </tr>
+      <tr style="border-bottom: 1px solid var(--border);">
+        <td style="padding: 0.5rem 0;">Conta corrente (extrato)</td>
+        <td style="padding: 0.5rem 0;"><code>.xls</code></td>
+        <td style="padding: 0.5rem 0;"><code>checking</code></td>
+      </tr>
+      <tr>
+        <td style="padding: 0.5rem 0;">Cartão de crédito (fatura)</td>
+        <td style="padding: 0.5rem 0;"><code>.xlsx</code></td>
+        <td style="padding: 0.5rem 0;"><code>card</code></td>
+      </tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Extrato conta corrente (.xls)</h2>
+    <h4>Como baixar no BTG</h4>
+    <ol>
+      <li>Abra o app ou site do BTG e acesse sua <strong>conta corrente</strong>.</li>
+      <li>Exporte o <strong>extrato</strong> do período desejado.</li>
+      <li>Confirme que o arquivo termina em <code>.xls</code> (não <code>.xlsx</code>).</li>
+    </ol>
+    <h4>Comando</h4>
+    <pre>btg-ofx-converter checking Extrato_2026-01.xls</pre>
+    <p>Gera <code>Extrato_2026-01.ofx</code> na mesma pasta do arquivo original.</p>
+  </section>
+
+  <section>
+    <h2>Fatura cartão (.xlsx)</h2>
+    <h4>Como baixar no BTG</h4>
+    <ol>
+      <li>Abra o app ou site do BTG e acesse o <strong>cartão de crédito</strong>.</li>
+      <li>Baixe a <strong>fatura</strong> do ciclo desejado (ex.: <code>2026-08-15_Fatura_BTG.xlsx</code>).</li>
+      <li>Confirme que o arquivo termina em <code>.xlsx</code>.</li>
+    </ol>
+    <h4>Comando</h4>
+    <pre>btg-ofx-converter card 2026-08-15_Fatura_BTG.xlsx</pre>
+    <p>Gera <code>2026-08-15_Fatura_BTG.ofx</code> na mesma pasta.</p>
+  </section>
+
+  <section>
+    <h2>Exemplos por sistema</h2>
+    <h4>Windows (PowerShell ou CMD)</h4>
+    <pre>btg-ofx-converter.exe checking Extrato_2026-01.xls
+btg-ofx-converter.exe card 2026-08-15_Fatura_BTG.xlsx</pre>
+
+    <h4>macOS / Linux</h4>
+    <pre>chmod +x btg-ofx-converter-macos-arm64   # uma vez, após baixar
+./btg-ofx-converter-macos-arm64 checking Extrato_2026-01.xls
+./btg-ofx-converter-macos-arm64 card 2026-08-15_Fatura_BTG.xlsx</pre>
+
+    <p><strong>macOS:</strong> na primeira execução pode aparecer aviso do Gatekeeper. Use
+    <strong>Ajustes do Sistema → Privacidade e Segurança → Abrir assim mesmo</strong>, ou rode uma vez:
+    <code>xattr -cr ./btg-ofx-converter-macos-arm64</code></p>
+  </section>
+
+  <section>
+    <h2>Problemas ou sugestões</h2>
+    <ul>
+      <li>Abra uma issue no GitHub: <a href="https://github.com/joaovictornsv/btg-ofx-converter/issues">github.com/joaovictornsv/btg-ofx-converter/issues</a></li>
+      <li>Ou envie email: <a href="mailto:hi@joaovictornsv.dev">hi@joaovictornsv.dev</a></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Solução de problemas</h2>
+    <ul>
+      <li><strong>Extensão errada:</strong> use <code>checking</code> só para <code>.xls</code> e <code>card</code> só para <code>.xlsx</code>.</li>
+      <li><strong>Arquivo não encontrado:</strong> confira o caminho; no terminal, navegue até a pasta do arquivo antes de rodar.</li>
+      <li><strong>Erro ao ler o arquivo:</strong> o BTG pode ter alterado o formato — envie um exemplo (com dados sensíveis apagados) numa issue.</li>
+      <li><strong>App não importa o OFX:</strong> alguns apps de cartão exigem layout OFX específico; reporte qual app você usa.</li>
+    </ul>
+  </section>
+</main>
+</body>
+</html>
