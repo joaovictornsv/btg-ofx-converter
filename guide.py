@@ -6,7 +6,7 @@ import shutil
 import sys
 from pathlib import Path
 
-GUIDE_FILENAME = "guia-btg-ofx.html"
+GUIDE_FILENAME = "guia-btg-ofx.md"
 
 
 def guide_source_path() -> Path:

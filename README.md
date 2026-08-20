@@ -11,6 +11,7 @@ Runs entirely on your machine. No account data is uploaded anywhere.
 - [Limitations](#limitations)
 - [Report issues / feedback](#report-issues--feedback)
 - [Recommended folder (especially for non-developers)](#recommended-folder-especially-for-non-developers)
+- [Guia em português](#guia-em-português)
 - [Quick start (download — no Python)](#quick-start-download--no-python)
 - [Exporting from BTG](#exporting-from-btg)
 - [Quick start (from source)](#quick-start-from-source)
@@ -67,10 +68,14 @@ btg-ofx/                              ← your dedicated folder
 ├── extrato.ofx                       ← generated
 ├── 2026-08-15_Fatura_BTG.xlsx        ← BTG card fatura
 ├── fatura.ofx                        ← generated (same stem as input)
-└── guia-btg-ofx.html                 ← usage guide (copied here on first run)
+└── guia-btg-ofx.md                   ← usage guide (copied here on first run)
 ```
 
 Open the terminal **inside** this folder before running commands.
+
+## Guia em português
+
+Step-by-step instructions in Portuguese: **[docs/guia-btg-ofx.md](docs/guia-btg-ofx.md)** — readable directly on GitHub.
 
 ## Quick start (download — no Python)
 
@@ -78,7 +83,7 @@ Open the terminal **inside** this folder before running commands.
    - **Windows:** `btg-ofx-converter-windows-x86_64` → rename to `btg-ofx-converter.exe` (optional)
    - **macOS (Apple Silicon):** `btg-ofx-converter-macos-arm64`
    - **Linux:** `btg-ofx-converter-linux-x86_64`
-2. Read [`docs/guia-btg-ofx.html`](docs/guia-btg-ofx.html) (Portuguese step-by-step guide).
+2. Read the [Portuguese guide](docs/guia-btg-ofx.md) (also copied to your folder on first run).
 3. Export your file from BTG (see [Exporting from BTG](#exporting-from-btg)).
 4. Run the matching command:
 

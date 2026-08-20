@@ -117,7 +117,7 @@ Behavior (both subcommands):
 2. Validate extension — `.xls` for `checking`, `.xlsx` for `card` (case-insensitive)
 3. Parse → `write_ofx(..., acct_type=...)`
 4. Write `{input_stem}.ofx` beside input (UTF-8)
-5. Call `write_guide_copy(input_path.parent)` — copies `guia-btg-ofx.html` if not already present
+5. Call `write_guide_copy(input_path.parent)` — copies `guia-btg-ofx.md` if not already present
 6. Print `OFX written to {path}` and exit 0
 
 Errors: missing file, wrong extension, parse failure, missing `xlrd` / `openpyxl` → message on stderr, exit 1. Mirror messages from `convert_xls_to_ofx.py`.
@@ -158,7 +158,7 @@ btg-ofx-converter/
 │   ├── sample_extrato.xls     # synthetic BTG checking export
 │   └── sample_fatura.xlsx     # synthetic BTG card fatura
 ├── docs/
-│   └── guia-btg-ofx.html      # Portuguese step-by-step guide
+│   └── guia-btg-ofx.md        # Portuguese step-by-step guide (GitHub-friendly)
 ├── tests/
 │   ├── __init__.py
 │   ├── test_convert.py
@@ -224,9 +224,9 @@ Section order — **Privacy first**, then usage, then developer details (intenti
 8. **Quick start (from source)**
 9. **Development / release** — tests, `./scripts/build-binary.sh`, tag `v*`
 
-### `docs/guia-btg-ofx.html` (Portuguese, self-contained HTML)
+### `docs/guia-btg-ofx.md` (Portuguese, Markdown)
 
-Same priorities — **privacidade first**:
+Same priorities — **privacidade first**. Renders natively on GitHub for non-tech users browsing the repo:
 
 1. **Privacidade** — processamento 100% local; não compartilhe extratos reais
 2. O que é OFX (Quicken, GNUCash, etc.)
@@ -236,7 +236,7 @@ Same priorities — **privacidade first**:
 6. **Problemas ou sugestões** — GitHub Issues ou hi@joaovictornsv.dev
 7. Troubleshooting (extensão errada, `checking` vs `card`, arquivo não encontrado)
 
-Bundled via PyInstaller `datas=[("docs/guia-btg-ofx.html", "docs")]`; `guide.py` resolves path from `sys._MEIPASS` or repo `docs/`.
+Bundled via PyInstaller `datas=[("docs/guia-btg-ofx.md", "docs")]`; `guide.py` resolves path from `sys._MEIPASS` or repo `docs/`.
 
 ---
 
@@ -254,7 +254,7 @@ Adapt `ibkr-ir/.github/workflows/release.yml`:
   btg-ofx-converter card examples/sample_fatura.xlsx
   test -f examples/sample_fatura.ofx
   ```
-- **Artifacts:** `btg-ofx-converter-{linux-x86_64,windows-x86_64,macos-arm64}` + `guia-btg-ofx.html` per platform bundle
+- **Artifacts:** `btg-ofx-converter-{linux-x86_64,windows-x86_64,macos-arm64}` + `guia-btg-ofx.md` per platform bundle
 - **Publish:** `softprops/action-gh-release@v2`
 
 Local build: `./scripts/build-binary.sh` → `dist/btg-ofx-converter` (or `.exe` on Windows)
@@ -295,7 +295,7 @@ Optional CI job (before release tags): same unittest command on `ubuntu-latest` 
 ### Phase 3 — Docs
 
 - [ ] Write `README.md` (privacy first)
-- [ ] Write `docs/guia-btg-ofx.html`
+- [ ] Write `docs/guia-btg-ofx.md`
 
 ### Phase 4 — Release infra
 

@@ -7,7 +7,7 @@ a = Analysis(
     ["convert.py"],
     pathex=["."],
     binaries=[],
-    datas=[("docs/guia-btg-ofx.html", "docs")],
+    datas=[("docs/guia-btg-ofx.md", "docs")],
     hiddenimports=[
         "xlrd",
         "openpyxl",
