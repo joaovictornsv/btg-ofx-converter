@@ -1,0 +1,21 @@
+# User bank exports — never commit real data
+*.xls
+*.xlsx
+*.ofx
+!examples/**
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.deps/
+
+# PyInstaller
+build/
+dist/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
