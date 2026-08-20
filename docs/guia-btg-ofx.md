@@ -47,6 +47,17 @@ Gera `Extrato_2026-01.ofx` na mesma pasta do arquivo original.
 2. Baixe a **fatura** do ciclo desejado (ex.: `2026-08-15_Fatura_BTG.xlsx`).
 3. Confirme que o arquivo termina em `.xlsx`.
 
+### Remover a senha (obrigatório na maioria das faturas BTG)
+
+A fatura baixada do BTG costuma vir **protegida por senha**. O conversor **não consegue ler** arquivos criptografados.
+
+1. Abra o arquivo no **Excel** ou **LibreOffice Calc**.
+2. Digite a senha quando solicitado (o BTG envia por email ou mostra no app).
+3. **Salve uma cópia sem senha** — *Arquivo → Salvar como* e deixe os campos de senha vazios.
+4. Use essa **cópia sem proteção** no comando `card` abaixo.
+
+Se aparecer o erro `File is not a zip file`, o arquivo ainda está protegido — repita estes passos.
+
 ### Comando
 
 ```text
@@ -86,6 +97,7 @@ xattr -cr ./btg-ofx-converter-macos-arm64
 ## Solução de problemas
 
 - **Extensão errada:** use `checking` só para `.xls` e `card` só para `.xlsx`.
+- **Fatura com senha / `File is not a zip file`:** abra a fatura no Excel ou LibreOffice com a senha do BTG e salve uma **cópia sem senha** antes de converter.
 - **Arquivo não encontrado:** confira o caminho; no terminal, navegue até a pasta do arquivo antes de rodar.
 - **Erro ao ler o arquivo:** o BTG pode ter alterado o formato — envie um exemplo (com dados sensíveis apagados) numa issue.
 - **App não importa o OFX:** alguns apps de cartão exigem layout OFX específico; reporte qual app você usa.

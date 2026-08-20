@@ -39,6 +39,7 @@ Tested only with **BTG Pactual** export formats. Not affiliated with BTG.
 
 - **Checking:** legacy `.xls` extrato de conta corrente — not `.xlsx`.
 - **Card:** `.xlsx` fatura de cartão — not the checking extrato format.
+- **Card password:** BTG fatura downloads are often **password-protected**. This tool cannot read encrypted files. Open the fatura in Excel or LibreOffice with your password, then **Save a copy without a password** before running `card`.
 - BTG may change export layouts; if conversion fails after a BTG update, [open an issue](#report-issues--feedback).
 - Credit card OFX uses `ACCTTYPE=CREDITCARD` inside a standard bank OFX envelope. Some apps may expect a different credit-card OFX layout.
 
@@ -119,7 +120,14 @@ Step-by-step instructions in Portuguese: **[docs/guia-btg-ofx.md](docs/guia-btg-
 1. Open the BTG app or website and go to **cartão de crédito**.
 2. Download the **fatura** for the desired cycle (often named like `YYYY-MM-DD_Fatura_BTG.xlsx`).
 3. Confirm the extension is **`.xlsx`**.
-4. Run `card` with the file path.
+4. **Remove the file password** (required for most BTG faturas):
+   - Open the downloaded file in **Excel** or **LibreOffice Calc**.
+   - Enter the password when prompted (BTG usually sends it by email or shows it in the app).
+   - **Save a copy** without password protection — e.g. *File → Save As* and leave the password fields empty.
+   - Use that **unprotected copy** for conversion (keep the original locked file as backup if you want).
+5. Run `card` with the **unprotected** file path.
+
+If conversion fails with `File is not a zip file`, the file is still password-protected or not a real `.xlsx` — repeat step 4.
 
 ## Quick start (from source)
 
