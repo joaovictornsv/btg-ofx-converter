@@ -58,6 +58,73 @@ class ConvertCheckingTests(unittest.TestCase):
             input_path.unlink(missing_ok=True)
             output_path.unlink(missing_ok=True)
 
+    @patch("convert.parse_xls")
+    @patch("convert.write_guide_copy")
+    def test_no_guide_skips_copy(
+        self,
+        mock_write_guide: MagicMock,
+        mock_parse_xls: MagicMock,
+    ) -> None:
+        mock_parse_xls.return_value = (
+            "20260101000000",
+            "20260131235959",
+            [
+                Transaction(
+                    trn_type="DEBIT",
+                    date="20260115120000",
+                    amount=Decimal("-10.00"),
+                    memo="memo",
+                    name="Store",
+                )
+            ],
+        )
+        input_path = Path("extrato-noguide.xls")
+        output_path = Path("extrato-noguide.ofx")
+        input_path.touch()
+        output_path.unlink(missing_ok=True)
+
+        try:
+            exit_code = convert.main(["--no-guide", "checking", str(input_path)])
+            self.assertEqual(exit_code, 0)
+            self.assertTrue(output_path.exists())
+            mock_write_guide.assert_not_called()
+        finally:
+            input_path.unlink(missing_ok=True)
+            output_path.unlink(missing_ok=True)
+
+    @patch("convert.parse_xls")
+    @patch("convert.write_guide_copy")
+    def test_writes_guide_by_default(
+        self,
+        mock_write_guide: MagicMock,
+        mock_parse_xls: MagicMock,
+    ) -> None:
+        mock_parse_xls.return_value = (
+            "20260101000000",
+            "20260131235959",
+            [
+                Transaction(
+                    trn_type="DEBIT",
+                    date="20260115120000",
+                    amount=Decimal("-10.00"),
+                    memo="memo",
+                    name="Store",
+                )
+            ],
+        )
+        input_path = Path("extrato-guide.xls")
+        output_path = Path("extrato-guide.ofx")
+        input_path.touch()
+        output_path.unlink(missing_ok=True)
+
+        try:
+            exit_code = convert.main(["checking", str(input_path)])
+            self.assertEqual(exit_code, 0)
+            mock_write_guide.assert_called_once_with(input_path.parent)
+        finally:
+            input_path.unlink(missing_ok=True)
+            output_path.unlink(missing_ok=True)
+
     def test_missing_file_returns_error(self) -> None:
         with patch.object(sys, "argv", ["convert.py", "checking", "missing.xls"]):
             exit_code = convert.main()

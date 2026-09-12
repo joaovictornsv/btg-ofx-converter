@@ -17,6 +17,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Convert BTG Pactual bank exports to OFX.",
     )
+    parser.add_argument(
+        "--no-guide",
+        action="store_true",
+        help="Do not copy guia-btg-ofx.html beside the output",
+    )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     checking = subparsers.add_parser(
@@ -48,6 +53,7 @@ def _convert(
     expected_suffix: str,
     parse,
     acct_type: str,
+    copy_guide: bool = True,
 ) -> int:
     if not path.exists():
         print(f"Error: file not found: {path}", file=sys.stderr)
@@ -75,7 +81,8 @@ def _convert(
         write_ofx(period_start, period_end, transactions, acct_type=acct_type),
         encoding="utf-8",
     )
-    write_guide_copy(path.parent)
+    if copy_guide:
+        write_guide_copy(path.parent)
     print(f"OFX written to {output_path}")
     return 0
 
@@ -84,12 +91,15 @@ def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     path: Path = args.input_file
 
+    copy_guide = not args.no_guide
+
     if args.command == "checking":
         return _convert(
             path,
             expected_suffix=".xls",
             parse=parse_xls,
             acct_type="CHECKING",
+            copy_guide=copy_guide,
         )
 
     if args.command == "card":
@@ -98,6 +108,7 @@ def main(argv: list[str] | None = None) -> int:
             expected_suffix=".xlsx",
             parse=parse_fatura,
             acct_type="CREDITCARD",
+            copy_guide=copy_guide,
         )
 
     print(f"Error: unknown command: {args.command}", file=sys.stderr)
